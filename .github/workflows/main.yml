@@ -1,24 +1,41 @@
-# This is an IDE for creating a workflow with .yaml
-# Workflows are processes or commands you want to run when a certain thing happens
 
-# When code is pushed to this repo (on this branch) Print out to the console "Code Pushed"
-
-# Workflows creates a linux instance for us and runs the specified commands 
 
 name: GitActions Demo
 
-# Do these actions when we push to this branch
 on: [push]
 
-# What jobs you wish the server to do
 jobs:
-  # What is the name of the job
-  basic_action:
-    # What type of instance is this job running on, linux distribution 
+  demo_job:
     runs-on: ubuntu-latest
-    # What are we wanting our ubuntu machine to do
     steps: 
-    # echo outputs some text, by default this is to the terminal but can also add text to a file
     - run: echo 'Hello World!'
-    - run: pwd 
-    - run: ls
+    - run: echo 'Running on ${{runner.os}}' 
+  
+  exercise_job:
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo 'Hello World'
+    - run: pwd
+    - run: ls -a
+    - run: echo 'Commit message ${{ github.event.head_commit.message }}'
+    - run: echo 'job name ${{ github.job }}'
+    
+  clone_job:
+    runs-on: ubuntu-latest
+    steps:
+    - run: ls -a
+    - name: Checkout
+      uses: actions/checkout@v2.5.0 # Default repo to clone down / checkout is our one
+    - run: echo '${{github.repository}}'
+    - run: ls -a
+    - run: cat file1.txt
+    - run: echo "This is new text" >> file1.txt
+    - run: cat file1.txt
+    
+  new_job1:
+    runs-on: ubuntu-latest 
+    steps:
+    - run: touch Hello.py
+    - run: cat Hello.py
+    - run: echo "this is new" >> Hello.py 
+    - run: cat Hello.py
